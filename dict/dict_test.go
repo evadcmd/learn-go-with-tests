@@ -3,7 +3,7 @@ package main
 import "testing"
 
 func TestDict(t *testing.T) {
-	t.Run("get the key", func(t *testing.T) {
+	t.Run("get a value with key", func(t *testing.T) {
 		d := Dict{"k": "v"}
 		v, err := d.Get("k")
 		if err != nil {
@@ -14,7 +14,7 @@ func TestDict(t *testing.T) {
 			t.Errorf("got: %s, want: %s", v, want)
 		}
 	})
-	t.Run("get a key which does not exist", func(t *testing.T) {
+	t.Run("get a value with key not existing", func(t *testing.T) {
 		d := Dict{"k": "v"}
 		v, err := d.Get("k1")
 		if err != ErrNotFound {
@@ -25,7 +25,7 @@ func TestDict(t *testing.T) {
 			t.Errorf("got: %s, want: %s", v, want)
 		}
 	})
-	t.Run("put value", func(t *testing.T) {
+	t.Run("put an entry into the map", func(t *testing.T) {
 		d := Dict{}
 		d.Put("k", "v")
 		v, err := d.Get("k")

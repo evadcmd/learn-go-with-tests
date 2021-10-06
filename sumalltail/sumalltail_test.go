@@ -19,16 +19,14 @@ func assertSliceEqual(t *testing.T, got []int, want []int) {
 }
 
 func TestSumAll(t *testing.T) {
-
 	t.Run("non-empty slice test", func(t *testing.T) {
 		got := sumall([]int{1, 3, 5}, []int{2, 4})
-		want := []int{9, 6}
+		want := []int{8, 4}
 		assertSliceEqual(t, got, want)
 	})
-
 	t.Run("empty slice test", func(t *testing.T) {
 		got := sumall([]int{}, []int{2, 4})
-		want := []int{0, 6}
+		want := []int{0, 4}
 		assertSliceEqual(t, got, want)
 	})
 }

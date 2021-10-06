@@ -3,10 +3,13 @@ package main
 import "fmt"
 
 func sum(slice []int) (res int) {
-	for _, i := range slice {
+	if len(slice) < 1 {
+		return 0
+	}
+	for _, i := range slice[1:] {
 		res += i
 	}
-	return
+	return res
 }
 
 func sumall(slices ...[]int) []int {

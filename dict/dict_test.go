@@ -17,7 +17,7 @@ func TestDict(t *testing.T) {
 	t.Run("get a key which does not exist", func(t *testing.T) {
 		d := Dict{"k": "v"}
 		v, err := d.Get("k1")
-		if err == nil {
+		if err != ErrNotFound {
 			t.Error("get key which does not exist should get a ErrNotFound")
 		}
 		want := ""

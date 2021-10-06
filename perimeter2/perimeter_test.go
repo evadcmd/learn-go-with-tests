@@ -21,11 +21,11 @@ func TestPeri(t *testing.T) {
 		shape     Shape
 		perimeter float64
 	}{
-		{&Rect{}, 0},
-		{&Rect{5, 2}, 14},
-		{&Rect{5.2, 2.5}, 2 * (5.2 + 2.5)},
-		{&Circle{5}, 2 * math.Pi * 5},
-		{&Circle{2.5}, 2 * math.Pi * 2.5},
+		{shape: &Rect{}, perimeter: 0},
+		{shape: &Rect{5, 2}, perimeter: 14},
+		{shape: &Rect{5.2, 2.5}, perimeter: 2 * (5.2 + 2.5)},
+		{shape: &Circle{5}, perimeter: 2 * math.Pi * 5},
+		{shape: &Circle{2.5}, perimeter: 2 * math.Pi * 2.5},
 	}
 
 	for _, test := range tests {
@@ -43,11 +43,11 @@ func TestArea(t *testing.T) {
 		shape Shape
 		area  float64
 	}{
-		{&Rect{}, 0},
-		{&Rect{5, 2}, 10},
-		{&Rect{5.2, 2.5}, 5.2 * 2.5},
-		{&Circle{5}, math.Pi * 5 * 5},
-		{&Circle{2.5}, math.Pi * 2.5 * 2.5},
+		{shape: &Rect{}, area: 0},
+		{shape: &Rect{5, 2}, area: 10},
+		{shape: &Rect{5.2, 2.5}, area: 5.2 * 2.5},
+		{shape: &Circle{5}, area: math.Pi * 5 * 5},
+		{shape: &Circle{2.5}, area: math.Pi * 2.5 * 2.5},
 	}
 
 	for _, test := range tests {

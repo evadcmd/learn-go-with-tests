@@ -9,8 +9,8 @@ const timeout = 3 * time.Second
 
 // valid urls including its delay time
 var validURLs = map[string]time.Duration{
-	"http://tata": 250 * time.Nanosecond,
-	"http://ruru": 520 * time.Nanosecond,
+	"http://tata": 3 * time.Second,
+	"http://ruru": 3 * time.Second,
 }
 
 // if url in valid urls list then wait for its delay and return true,

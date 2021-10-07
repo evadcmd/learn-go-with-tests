@@ -4,19 +4,15 @@ import "sync"
 
 type URLChecker func(string) bool
 
-func CheckURL(checker URLChecker, urls []string) map[string]bool {
-	m := make(map[string]bool)
+// avoid concurrent map writes by using sync.Map
+func CheckURL(checker URLChecker, urls []string) (m sync.Map) {
 	// run each url checker concurrently
 	wg := &sync.WaitGroup{}
-	mu := &sync.Mutex{}
 	for _, url := range urls {
 		wg.Add(1)
 		go func(url string) {
 			ok := checker(url)
-			// use mutex to avoid concurrent map writes
-			mu.Lock()
-			m[url] = ok
-			mu.Unlock()
+			m.Store(url, ok)
 			wg.Done()
 		}(url)
 	}

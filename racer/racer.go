@@ -25,7 +25,8 @@ func Racer(ctx context.Context, urls ...string) (string, error) {
 }
 
 func main() {
-	ctx, _ := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancelCtx := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancelCtx()
 	fast_url, err := Racer(
 		ctx,
 		"https://cloud.google.com/bigquery/docs/quickstarts/quickstart-client-libraries#client-libraries-install-csharp",

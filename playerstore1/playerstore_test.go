@@ -3,7 +3,6 @@ package main
 import (
 	"bytes"
 	"fmt"
-	"io"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -62,6 +61,7 @@ func TestGetHandler(t *testing.T) {
 	}
 }
 
+/*
 func TestPlaystore(t *testing.T) {
 	t.Run("test get req", func(t *testing.T) {
 		resp, err := http.Get("http://localhost:8090/players/TATA")
@@ -79,3 +79,4 @@ func TestPlaystore(t *testing.T) {
 		}
 	})
 }
+*/

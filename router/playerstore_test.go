@@ -1,12 +1,16 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"reflect"
 	"strconv"
 	"testing"
 )
+
+var testMux = NewPlayerServeMux()
 
 type testcase struct {
 	name       string
@@ -15,13 +19,13 @@ type testcase struct {
 }
 
 func initTestcases() (testcases []*testcase) {
-	for name, score := range defaultHttpHandler.store {
+	for name, score := range testMux.store {
 		testcases = append(testcases, &testcase{name, score, http.StatusOK})
 	}
 	return
 }
 
-func TestGetHandler(t *testing.T) {
+func TestGetScoreHandler(t *testing.T) {
 	testcases := append(initTestcases(), &testcase{"UNKOWN", 0, http.StatusNotFound})
 	for _, testcase := range testcases {
 		t.Run(testcase.name, func(t *testing.T) {
@@ -30,11 +34,12 @@ func TestGetHandler(t *testing.T) {
 	}
 }
 
-func TestPostHandler(t *testing.T) {
+func TestPostScoreHandler(t *testing.T) {
 	testcases := append(initTestcases(), &testcase{"UNKOWN", 0, http.StatusOK})
 	for _, testcase := range testcases {
+		t.Log(testcase)
 		t.Run(testcase.name, func(t *testing.T) {
-			postPlayerName(t, testcase.name, testcase.score, testcase.httpStatus)
+			postPlayerScore(t, testcase.name, testcase.score, testcase.httpStatus)
 		})
 	}
 }
@@ -47,7 +52,7 @@ func getPlayerScore(t *testing.T, name string, score int, status int) {
 	}
 	// use testhttp.ResponseRecorder as http.Response.Writer
 	recorder := httptest.NewRecorder()
-	defaultHttpHandler.ServeHTTP(recorder, req)
+	testMux.ServeHTTP(recorder, req)
 	body := recorder.Body.String()
 	gotScore, err := strconv.Atoi(body)
 	if err != nil {
@@ -61,20 +66,19 @@ func getPlayerScore(t *testing.T, name string, score int, status int) {
 	}
 }
 
-func postPlayerName(t *testing.T, name string, score int, status int) {
+func postPlayerScore(t *testing.T, name string, score int, status int) {
 	t.Helper()
 	req, err := http.NewRequest(http.MethodPost, fmt.Sprintf("/players/%s", name), nil)
 	if err != nil {
 		t.Log(err)
 	}
 	recoder := httptest.NewRecorder()
-	defaultHttpHandler.ServeHTTP(recoder, req)
+	testMux.ServeHTTP(recoder, req)
 	body := recoder.Body.String()
 	gotScore, err := strconv.Atoi(body)
 	if err != nil {
 		t.Errorf("got %v want %d", err, score)
 	}
-	t.Logf("got %d want %d", gotScore, score)
 	if score++; gotScore != score {
 		t.Errorf("got %d want %d", gotScore, score)
 	}
@@ -83,7 +87,16 @@ func postPlayerName(t *testing.T, name string, score int, status int) {
 	}
 }
 
-func TestMain(m *testing.M) {
-	initTestcases()
-	m.Run()
+func TestPlayerLeague(t *testing.T) {
+	req, err := http.NewRequest(http.MethodGet, "/league", nil)
+	if err != nil {
+		t.Error(err)
+	}
+	recorder := httptest.NewRecorder()
+	testMux.ServeHTTP(recorder, req)
+	res := map[string]int{}
+	json.Unmarshal(recorder.Body.Bytes(), &res)
+	if !reflect.DeepEqual(res, testMux.store) {
+		t.Errorf("got %v want %v", res, testMux.store)
+	}
 }

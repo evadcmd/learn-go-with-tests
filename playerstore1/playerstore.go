@@ -17,6 +17,7 @@ func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if !ok {
 		w.WriteHeader(http.StatusNotFound)
 		fmt.Fprint(w, "")
+		return
 	}
 	fmt.Fprint(w, fmt.Sprint(score))
 }
